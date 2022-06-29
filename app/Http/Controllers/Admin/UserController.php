@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
+use Image;
 
 class UserController extends Controller
 {
@@ -74,10 +75,17 @@ class UserController extends Controller
             $name = Str::slug(mb_substr($data['name'], 0, 100)) . time();
             $extenstion = $request->photo->extension();
             $nameFile = "{$name}.{$extenstion}";
-            $data['photo'] = $nameFile;
-            $upload = $request->photo->storeAs('users', $nameFile);
 
-            if (!$upload) {
+            $data['photo'] = $nameFile;
+
+            $destinationPath = storage_path() . '/app/public/users';
+            $img = Image::make($request->photo);
+            $img->resize(null, 100, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            })->crop(100, 100)->save($destinationPath . '/' . $nameFile);
+
+            if (!$img) {
                 return redirect()
                     ->back()
                     ->withInput()
@@ -170,7 +178,7 @@ class UserController extends Controller
         }
 
         if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
-            $name = Str::slug(mb_substr($data['name'], 0, 10)) . time();
+            $name = Str::slug(mb_substr($data['name'], 0, 200)) . "-" . time();
             $imagePath = storage_path() . '/app/public/users/' . $user->photo;
 
             if (File::isFile($imagePath)) {
@@ -182,9 +190,14 @@ class UserController extends Controller
 
             $data['photo'] = $nameFile;
 
-            $upload = $request->photo->storeAs('users', $nameFile);
+            $destinationPath = storage_path() . '/app/public/users';
+            $img = Image::make($request->photo);
+            $img->resize(null, 100, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            })->crop(100, 100)->save($destinationPath . '/' . $nameFile);
 
-            if (!$upload)
+            if (!$img)
                 return redirect()
                     ->back()
                     ->withInput()

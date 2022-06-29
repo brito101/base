@@ -46,8 +46,9 @@
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2">
                                         <label for="name">Nome</label>
-                                        <input type="text" class="form-control" id="name" placeholder="Nome Completo"
-                                            name="name" value="{{ old('name') ?? $user->name }}" required>
+                                        <input type="text" class="form-control" id="name"
+                                            placeholder="Nome Completo" name="name"
+                                            value="{{ old('name') ?? $user->name }}" required>
                                     </div>
                                 </div>
 
@@ -59,8 +60,8 @@
                                     </div>
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="cell">Celular</label>
-                                        <input type="tel" class="form-control" id="cell" placeholder="Celular" name="cell"
-                                            value="{{ old('cell') ?? $user->cell }}">
+                                        <input type="tel" class="form-control" id="cell" placeholder="Celular"
+                                            name="cell" value="{{ old('cell') ?? $user->cell }}">
                                     </div>
                                 </div>
 
