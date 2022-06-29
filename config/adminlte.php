@@ -239,6 +239,11 @@ return [
         ],
         //Custom menus
         [
+            'text'        => 'Dashboard',
+            'url'         => '/admin',
+            'icon'        => 'fa fa-fw fa-digital-tachograph',
+        ],
+        [
             'text'        => 'Usuários',
             'url'         => '#',
             'icon'        => 'fas fa-fw fa-users',

@@ -12,7 +12,7 @@
             $list = [];
 
             foreach ($users as $user) {
-                $list[] = [$user->id, $user->name, $user->email, $user->getRoleNames(), '<nobr>' . '<a class="btn btn-xs btn-default text-primary mx-1 shadow" title="Editar" href="users/' . $user->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-default text-danger mx-1 shadow" title="Excluir" href="users/destroy/' . $user->id . '" onclick="return confirm(\'Confirma a exclusão desta usuário?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>'];
+                $list[] = [$user->id, $user->name, $user->email, $user->getRoleNames(), '<nobr>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="users/' . $user->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="users/destroy/' . $user->id . '" onclick="return confirm(\'Confirma a exclusão desta usuário?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>'];
             }
 
             $config = [
@@ -49,7 +49,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex flex-wrap justify-content-between col-12 align-content-center">
-                                <h3 class="card-title align-self-center">Usuários Cadastradas</h3>
+                                <h3 class="card-title align-self-center">Usuários Cadastrados</h3>
                                 @can('Criar Usuários')
                                     <a href="{{ route('admin.users.create') }}" title="Novo Usuário"
                                         class="btn btn-success"><i class="fas fa-fw fa-plus"></i>Novo Usuário</a>
@@ -57,8 +57,8 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <x-adminlte-datatable id="table1" :heads="$heads" :heads="$heads" :config="$config" striped
-                                hoverable beautify with-buttons />
+                            <x-adminlte-datatable id="table1" :heads="$heads" :heads="$heads" :config="$config"
+                                striped hoverable beautify with-buttons />
                         </div>
                     </div>
                 </div>
