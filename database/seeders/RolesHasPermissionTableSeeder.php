@@ -67,7 +67,7 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 2
             ],
 
-            /** Users  de 12 to 16 (programmer and administrator) */
+            /** Users  de 12 to 17 (programmer and administrator) */
             [
                 'permission_id' => 12,
                 'role_id' => 1
@@ -106,6 +106,14 @@ class RolesHasPermissionTableSeeder extends Seeder
             ],
             [
                 'permission_id' => 16,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 17,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 17,
                 'role_id' => 2
             ],
         ]);
