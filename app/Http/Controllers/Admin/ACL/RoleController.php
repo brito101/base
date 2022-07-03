@@ -36,9 +36,7 @@ class RoleController extends Controller
                 ->make(true);
         }
 
-        return view('admin.acl.roles.index', [
-            'roles' => $roles
-        ]);
+        return view('admin.acl.roles.index', compact('roles'));
     }
 
     /**
@@ -99,11 +97,9 @@ class RoleController extends Controller
         }
         $role = Role::where('id', $id)->first();
         if (empty($role->id)) {
-            throw new UnauthorizedException('403', 'You do not have the required authorization.');
+            abort(403, 'Acesso não autorizado');
         }
-        return view('admin.acl.roles.edit', [
-            'role' => $role
-        ]);
+        return view('admin.acl.roles.edit', compact('role'));
     }
 
     /**
@@ -118,6 +114,12 @@ class RoleController extends Controller
         if (!Auth::user()->hasPermissionTo('Editar Perfis')) {
             abort(403, 'Acesso não autorizado');
         }
+
+        $role = Role::where('id', $id)->first();
+        if (empty($role->id)) {
+            abort(403, 'Acesso não autorizado');
+        }
+
         $check = Role::where('name', $request->name)->where('id', '!=', $id)->get();
         if ($check->count() > 0) {
             return redirect()
@@ -126,7 +128,7 @@ class RoleController extends Controller
                 ->with('error', 'O nome deste perfil já está em uso!');
         }
         $data = $request->all();
-        $role = Role::where('id', $id)->first();
+
         if ($role->update($data)) {
             return redirect()
                 ->route('admin.role.index')
@@ -150,7 +152,11 @@ class RoleController extends Controller
         if (!Auth::user()->hasPermissionTo('Excluir Perfis')) {
             abort(403, 'Acesso não autorizado');
         }
+
         $role = Role::where('id', $id)->first();
+        if (empty($role->id)) {
+            abort(403, 'Acesso não autorizado');
+        }
 
         if ($role->delete()) {
             return redirect()
@@ -169,20 +175,19 @@ class RoleController extends Controller
             abort(403, 'Acesso não autorizado');
         }
         $role = Role::where('id', $role)->first();
+        if (empty($role->id)) {
+            abort(403, 'Acesso não autorizado');
+        }
         $permissions = Permission::all();
 
         foreach ($permissions as $permission) {
-
             if ($role->hasPermissionTo($permission->name)) {
                 $permission->can = true;
             } else {
                 $permission->can = false;
             }
         }
-        return view('admin.acl.roles.permissions', [
-            'role' => $role,
-            'permissions' => $permissions
-        ]);
+        return view('admin.acl.roles.permissions', compact('role', 'permissions'));
     }
 
 

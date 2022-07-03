@@ -35,9 +35,7 @@ class PermissionController extends Controller
                 ->make(true);
         }
 
-        return view('admin.acl.permissions.index', [
-            'permissions' => $permissions
-        ]);
+        return view('admin.acl.permissions.index', compact('permissions'));
     }
 
     /**
@@ -98,11 +96,9 @@ class PermissionController extends Controller
         }
         $permission = Permission::where('id', $id)->first();
         if (empty($permission->id)) {
-            throw new UnauthorizedException('403', 'You do not have the required authorization.');
+            abort(403, 'Acesso não autorizado');
         }
-        return view('admin.acl.permissions.edit', [
-            'permission' => $permission
-        ]);
+        return view('admin.acl.permissions.edit', compact('permission'));
     }
 
     /**
@@ -149,7 +145,11 @@ class PermissionController extends Controller
         if (!Auth::user()->hasPermissionTo('Excluir Permissões')) {
             abort(403, 'Acesso não autorizado');
         }
+
         $permission = Permission::where('id', $id)->first();
+        if (empty($permission->id)) {
+            abort(403, 'Acesso não autorizado');
+        }
 
         if ($permission->delete()) {
             return redirect()
