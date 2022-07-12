@@ -4,19 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Carbon\Carbon;
+use App\Models\Views\User as ViewsUser;
+use App\Models\Views\Visit;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Shetabit\Visitor\Models\Visit;
 
 class AdminController extends Controller
 {
     public function index()
     {
-        $administrators = User::role('Administrador')->get()->count();
+        $administrators = ViewsUser::where('type', 'Administrador')->count();
 
-        /** Statistcs */
-        $statistics = $this->accessStatistcs();
+        /** Statistics */
+        $statistics = $this->accessStatistics();
         $onlineUsers = $statistics['onlineUsers'];
         $percent = $statistics['percent'];
         $access = $statistics['access'];
@@ -33,8 +33,8 @@ class AdminController extends Controller
 
     public function chart()
     {
-        /** Statistcs */
-        $statistics = $this->accessStatistcs();
+        /** Statistics */
+        $statistics = $this->accessStatistics();
         $onlineUsers = $statistics['onlineUsers'];
         $percent = $statistics['percent'];
         $access = $statistics['access'];
@@ -48,24 +48,26 @@ class AdminController extends Controller
         ]);
     }
 
-    private function accessStatistcs()
+    private function accessStatistics()
     {
-        $onlineUsers = User::online()->get()->count();
+        $onlineUsers = User::online()->count();
 
         $access = Visit::where('created_at', '>=', date("Y-m-d"))
             ->where('url', '!=', route('admin.home.chart'))
             ->get();
-        $accessYesterday = Visit::where('created_at', '>=', Carbon::now()->subDays(1))
-            ->where('created_at', '<', Carbon::now())
+        $accessYesterday = Visit::where('created_at', '>=', date("Y-m-d", strtotime('-1 day')))
+            ->where('created_at', '<', date("Y-m-d"))
             ->where('url', '!=', route('admin.home.chart'))
-            ->get();
+            ->count();
+
+        $totalDaily = $access->count();
 
         $percent = 0;
-        if ($accessYesterday->count() > 0) {
-            $percent = number_format((($access->count() - $accessYesterday->count()) / $access->count() * 100), 2, ",", ".");
+        if ($accessYesterday > 0) {
+            $percent = number_format((($totalDaily - $accessYesterday) / $totalDaily * 100), 2, ",", ".");
         }
 
-        /**Visitor Chart */
+        /** Visitor Chart */
         $data = $access->groupBy(function ($reg) {
             return date('H', strtotime($reg->created_at));
         });
@@ -81,7 +83,7 @@ class AdminController extends Controller
 
         return array(
             'onlineUsers' => $onlineUsers,
-            'access' => $access->count(),
+            'access' => $totalDaily,
             'percent' => $percent,
             'chart' => $chart
         );
