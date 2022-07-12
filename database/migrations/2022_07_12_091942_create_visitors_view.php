@@ -16,7 +16,7 @@ class CreateVisitorsView extends Migration
     {
         DB::statement("
         CREATE VIEW visitors_view AS
-        SELECT v.id, v.url, v.created_at
+        SELECT v.id, v.url, v.method, v.created_at
         FROM shetabit_visits as v
         ");
     }
@@ -28,6 +28,6 @@ class CreateVisitorsView extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('visitors_view');
+        DB::statement("DROP VIEW visitors_view");
     }
 }
