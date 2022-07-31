@@ -86,8 +86,8 @@ class UserController extends Controller
 
         if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
             $name = Str::slug(mb_substr($data['name'], 0, 100)) . time();
-            $extenstion = $request->photo->extension();
-            $nameFile = "{$name}.{$extenstion}";
+            $extension = $request->photo->extension();
+            $nameFile = "{$name}.{$extension}";
 
             $data['photo'] = $nameFile;
 
@@ -133,7 +133,6 @@ class UserController extends Controller
      */
     public function edit($id = null)
     {
-
         if ($id && !Auth::user()->hasPermissionTo('Editar Usuários')) {
             abort(403, 'Acesso não autorizado');
         }
@@ -200,8 +199,8 @@ class UserController extends Controller
                 unlink($imagePath);
             }
 
-            $extenstion = $request->photo->extension();
-            $nameFile = "{$name}.{$extenstion}";
+            $extension = $request->photo->extension();
+            $nameFile = "{$name}.{$extension}";
 
             $data['photo'] = $nameFile;
 
