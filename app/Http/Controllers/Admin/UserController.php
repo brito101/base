@@ -181,6 +181,11 @@ class UserController extends Controller
             $user = User::where('id', $id)->first();
         }
 
+        if (empty($user->id) && Auth::user()->hasPermissionTo('Editar Usuário')) {
+            $id = Auth::user()->id;
+            $user = User::where('id', $id)->first();
+        }
+
         if (empty($user->id)) {
             abort(403, 'Acesso não autorizado');
         }
@@ -199,8 +204,8 @@ class UserController extends Controller
                 unlink($imagePath);
             }
 
-            $extension = $request->photo->extension();
-            $nameFile = "{$name}.{$extension}";
+            $extenstion = $request->photo->extension();
+            $nameFile = "{$name}.{$extenstion}";
 
             $data['photo'] = $nameFile;
 
@@ -221,12 +226,18 @@ class UserController extends Controller
         if ($user->update($data)) {
             if (!empty($request->role)) {
                 $user->syncRoles($request->role);
-                $user->type = $request->role;
                 $user->save();
             }
-            return redirect()
-                ->route('admin.users.index')
-                ->with('success', 'Atualização realizada!');
+
+            if (Auth::user()->hasPermissionTo('Editar Usuários')) {
+                return redirect()
+                    ->route('admin.users.index')
+                    ->with('success', 'Atualização realizada!');
+            } else {
+                return redirect()
+                    ->route('admin.user.edit')
+                    ->with('success', 'Atualização realizada!');
+            }
         } else {
             return redirect()
                 ->back()
@@ -234,7 +245,6 @@ class UserController extends Controller
                 ->with('error', 'Erro ao atualizar!');
         }
     }
-
     /**
      * Remove the specified resource from storage.
      *

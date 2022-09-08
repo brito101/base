@@ -61,7 +61,7 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 11,
                 'role_id' => 1
             ],
-            /* AProfile assignment by administrator type user */
+            /* A Profile assignment by administrator type user */
             [
                 'permission_id' => 11,
                 'role_id' => 2
