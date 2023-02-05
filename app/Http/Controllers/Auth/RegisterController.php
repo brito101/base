@@ -64,14 +64,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = User::create([
+        return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'pa ssword' => Hash::make($data['password']),
+            'password' => Hash::make($data['password']),
         ]);
-
-        $user->syncRoles('Usuário');
-
-        return $user;
     }
 }
