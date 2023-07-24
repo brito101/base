@@ -7,15 +7,15 @@ Visitors log
 
 ## Usage</h5>
 
-`cp .env.example .env`
-Edit .env parameters
+- `cp .env.example .env`
+- Edit .env parameters
 
-`composer install`
-`php artisan key:generate`
-`php artisan storage:link`
-`php artisan migrate --seed`
-`npm install && npm run dev`
-p`hp artisan jwt:secret`
+- `composer install`
+- `php artisan key:generate`
+- `php artisan storage:link`
+- `php artisan migrate --seed`
+- `npm install && npm run dev`
+- `hp artisan jwt:secret`
 
 ### Programmer login
 
