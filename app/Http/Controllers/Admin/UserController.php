@@ -134,13 +134,12 @@ class UserController extends Controller
      */
     public function edit($id = null)
     {
-        CheckPermission::checkManyAuth(['sdasdas Glu', 'asdasdsad Gle']);
-        // if ($id) {
-        //     CheckPermission::checkAuth('Editar Usuários');
-        // } else {
-        //     CheckPermission::checkAuth('Editar Usuário');
-        //     $id = Auth::user()->id;
-        // }
+        if ($id) {
+            CheckPermission::checkAuth('Editar Usuários');
+        } else {
+            CheckPermission::checkAuth('Editar Usuário');
+            $id = Auth::user()->id;
+        }
 
         $user = User::find($id);
         if (!$user) {
